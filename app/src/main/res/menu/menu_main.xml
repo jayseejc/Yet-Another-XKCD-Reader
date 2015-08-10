@@ -1,0 +1,20 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".MainActivity">
+    <item
+        android:id="@+id/action_previous_comic"
+        android:icon="@drawable/ic_arrow_back_white_48dp"
+        android:title="Previous Comic"
+        app:showAsAction="always" />
+    <item
+        android:id="@+id/action_random_comic"
+        android:icon="@drawable/ic_random_white_48dp"
+        android:title="Random comic"
+        app:showAsAction="always" />
+    <item
+        android:id="@+id/action_next_comic"
+        android:icon="@drawable/ic_arrow_forward_white_48dp"
+        android:title="Next comic"
+        app:showAsAction="always" />
+</menu>

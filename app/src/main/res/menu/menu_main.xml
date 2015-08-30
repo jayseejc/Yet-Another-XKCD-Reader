@@ -17,4 +17,10 @@
         android:icon="@drawable/ic_arrow_forward_white_48dp"
         android:title="Next comic"
         app:showAsAction="always" />
+
+    <item
+        android:id="@+id/action_latest_comic"
+        android:icon="@drawable/ic_skip_next_white_48dp"
+        android:title="Latest comic"
+        app:showAsAction="always" />
 </menu>

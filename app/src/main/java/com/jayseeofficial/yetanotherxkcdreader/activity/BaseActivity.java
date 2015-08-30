@@ -4,7 +4,6 @@ import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 
 import com.jayseeofficial.yetanotherxkcdreader.BuildConfig;
-import com.jayseeofficial.yetanotherxkcdreader.event.Event;
 
 import de.greenrobot.event.EventBus;
 

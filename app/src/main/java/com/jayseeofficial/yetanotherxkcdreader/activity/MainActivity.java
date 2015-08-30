@@ -15,9 +15,6 @@ import com.jayseeofficial.yetanotherxkcdreader.event.ComicLoadFailedEvent;
 import com.jayseeofficial.yetanotherxkcdreader.event.ComicLoadedEvent;
 import com.jayseeofficial.yetanotherxkcdreader.object.Comic;
 import com.jayseeofficial.yetanotherxkcdreader.retrofit.XKCDBridge;
-import com.squareup.picasso.Picasso;
-
-import java.io.IOException;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -41,7 +38,7 @@ public class MainActivity extends BaseActivity {
 
     void loadPreviousComic() {
         Comic currentComic = Application.getCurrentComic();
-        if(currentComic==null) return;
+        if (currentComic == null) return;
         if (currentComic.getNum() > 1) {
             XKCDBridge.loadComicAsync(currentComic.getNum() - 1);
             loadingDialog.show();
@@ -50,11 +47,15 @@ public class MainActivity extends BaseActivity {
 
     void loadNextComic() {
         Comic currentComic = Application.getCurrentComic();
-        if(currentComic==null) return;
+        if (currentComic == null) return;
         if (currentComic.getNum() < XKCDBridge.getLatestComicNumber()) {
             XKCDBridge.loadComicAsync(currentComic.getNum() + 1);
             loadingDialog.show();
         }
+    }
+
+    void loadLatestComic() {
+        XKCDBridge.loadLatestComicAsync();
     }
 
     @Override
@@ -94,6 +95,9 @@ public class MainActivity extends BaseActivity {
             case R.id.action_next_comic:
                 loadNextComic();
                 return true;
+            case R.id.action_latest_comic:
+                loadLatestComic();
+                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
@@ -102,20 +106,16 @@ public class MainActivity extends BaseActivity {
     protected void loadComic(final Comic comic) {
         txtError.setVisibility(View.GONE);
         loadingDialog.setProgress(1);
-        try {
-            final Bitmap bmp = Picasso.with(this).load(comic.getImageUrl()).get();
-            loadingDialog.setProgress(2);
-            runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    imageView.setImageBitmap(bmp);
-                    setTitle(comic.getTitle());
-                    resetLoadingDialog();
-                }
-            });
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        final Bitmap bmp = XKCDBridge.loadComicImage(this, comic);
+        loadingDialog.setProgress(2);
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                imageView.setImageBitmap(bmp);
+                setTitle(comic.getTitle());
+                resetLoadingDialog();
+            }
+        });
     }
 
     private void resetLoadingDialog() {
@@ -132,9 +132,10 @@ public class MainActivity extends BaseActivity {
         loadComic(event.getComic());
     }
 
-    public void onEventMainThread(ComicLoadFailedEvent event){
+    public void onEventMainThread(ComicLoadFailedEvent event) {
         txtError.setText(event.getErrorMessage());
         txtError.setVisibility(View.VISIBLE);
+        resetLoadingDialog();
     }
 
 }
